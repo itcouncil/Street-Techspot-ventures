@@ -8,15 +8,15 @@
 get_header();
 ?>
 
-<main id="primary" class="min-h-screen bg-white py-12 text-slate-950">
-	<div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+<main id="primary" class="stv-page-main">
+	<div class="stv-page-shell">
 		<?php
 		while ( have_posts() ) :
 			the_post();
 			?>
 			<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-				<h1 class="text-4xl font-black"><?php the_title(); ?></h1>
-				<div class="prose prose-slate mt-8 max-w-none">
+				<h1 class="stv-page-title"><?php the_title(); ?></h1>
+				<div class="stv-page-content">
 					<?php the_content(); ?>
 				</div>
 			</article>

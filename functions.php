@@ -43,17 +43,7 @@ foreach ( $stv_includes as $stv_include ) {
  * @return array<int,array<string,mixed>>
  */
 function stv_visual_seed_products() {
-	$images = array(
-		'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&h=900&fit=crop&auto=format',
-		'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=900&fit=crop&auto=format',
-		'https://images.unsplash.com/photo-1555617981-dac3880eac6e?w=1200&h=900&fit=crop&auto=format',
-		'https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=1200&h=900&fit=crop&auto=format',
-		'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=1200&h=900&fit=crop&auto=format',
-		'https://images.unsplash.com/photo-1611174797136-5e1675f37627?w=1200&h=900&fit=crop&auto=format',
-		'https://images.unsplash.com/photo-1601524909162-ae8725290836?w=1200&h=900&fit=crop&auto=format',
-		'https://images.unsplash.com/photo-1629429407756-8a573a7f1f6f?w=1200&h=900&fit=crop&auto=format',
-	);
-	$items  = array(
+	$items = array(
 		array( 'M2 MacBook Pro Replacement Keyboard', 'Laptop Parts', 18500, 16400 ),
 		array( 'Intel Core i9 RTX 4080 Creator Build', 'Custom PCs', 385000, 359000 ),
 		array( 'OLED Samsung S23 Ultra Display Assembly', 'Phone Repair Parts', 28500, 26400 ),
@@ -106,7 +96,6 @@ function stv_visual_seed_products() {
 			'sale'       => (string) $item[3],
 			'sku'        => 'STV-PREMIUM-' . str_pad( (string) ( $index + 1 ), 3, '0', STR_PAD_LEFT ),
 			'stock'      => 4 + ( $index % 18 ),
-			'image'      => $images[ $index % count( $images ) ],
 			'tags'       => array( 'premium tech', 'kenya ecommerce', sanitize_title( $item[1] ) ),
 		);
 	}
@@ -122,37 +111,15 @@ function stv_visual_seed_products() {
  * @return int
  */
 function stv_sideload_product_image( $url, $product_id ) {
-	$existing = get_posts(
-		array(
-			'post_type'      => 'attachment',
-			'post_status'    => 'inherit',
-			'meta_key'       => '_stv_source_image_url',
-			'meta_value'     => esc_url_raw( $url ),
-			'fields'         => 'ids',
-			'posts_per_page' => 1,
-		)
-	);
+	unset( $url );
 
-	if ( ! empty( $existing ) ) {
-		return absint( $existing[0] );
-	}
+	$product = function_exists( 'wc_get_product' ) ? wc_get_product( $product_id ) : false;
 
-	if ( ! function_exists( 'media_sideload_image' ) ) {
-		require_once ABSPATH . 'wp-admin/includes/media.php';
-		require_once ABSPATH . 'wp-admin/includes/file.php';
-		require_once ABSPATH . 'wp-admin/includes/image.php';
-	}
-
-	$attachment_id = media_sideload_image( esc_url_raw( $url ), $product_id, null, 'id' );
-
-	if ( is_wp_error( $attachment_id ) ) {
-		update_post_meta( $product_id, '_stv_external_image_url', esc_url_raw( $url ) );
+	if ( ! $product || ! function_exists( '\\STV\\Theme\\seed_svg_attachment' ) ) {
 		return 0;
 	}
 
-	update_post_meta( $attachment_id, '_stv_source_image_url', esc_url_raw( $url ) );
-
-	return absint( $attachment_id );
+	return absint( \STV\Theme\seed_svg_attachment( $product->get_name(), '#006D77' ) );
 }
 
 /**
@@ -199,7 +166,7 @@ function stv_generate_premium_catalog( $force = false ) {
 		$product->set_description( '<p>' . esc_html__( 'Built for serious technology users who need speed, precision and reliable performance.', 'street-techspot-ventures' ) . '</p><ul><li>' . esc_html__( 'High-speed data throughput', 'street-techspot-ventures' ) . '</li><li>' . esc_html__( 'Precision-engineered components', 'street-techspot-ventures' ) . '</li><li>' . esc_html__( 'Low thermal footprint', 'street-techspot-ventures' ) . '</li><li>' . esc_html__( 'Enterprise-grade durability', 'street-techspot-ventures' ) . '</li></ul>' );
 
 		$saved_id = $product->save();
-		$image_id = stv_sideload_product_image( $data['image'], $saved_id );
+		$image_id = stv_sideload_product_image( '', $saved_id );
 
 		if ( $image_id ) {
 			$product->set_image_id( $image_id );

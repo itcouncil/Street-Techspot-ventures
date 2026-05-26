@@ -50,8 +50,8 @@ function render_product_card( $product_id ) {
 	$image_id  = $product->get_image_id();
 	$image_alt = $image_id ? get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : $product->get_name();
 	?>
-	<article class="stv-product-card group" data-product-id="<?php echo esc_attr( $product->get_id() ); ?>">
-		<a class="block" href="<?php echo esc_url( get_permalink( $product->get_id() ) ); ?>">
+	<article class="stv-product-card" data-product-id="<?php echo esc_attr( $product->get_id() ); ?>">
+		<a class="stv-product-image" href="<?php echo esc_url( get_permalink( $product->get_id() ) ); ?>">
 			<?php
 			if ( $image_id ) {
 				echo wp_get_attachment_image(
@@ -60,34 +60,34 @@ function render_product_card( $product_id ) {
 					false,
 					array(
 						'alt'      => esc_attr( $image_alt ),
-						'class'    => 'aspect-square w-full object-cover',
+						'class'    => 'stv-product-thumb',
 						'loading'  => 'lazy',
 						'decoding' => 'async',
 					)
 				);
 			} else {
-				echo wp_kses_post( wc_placeholder_img( 'woocommerce_thumbnail', array( 'class' => 'aspect-square w-full object-cover' ) ) );
+				echo wp_kses_post( wc_placeholder_img( 'woocommerce_thumbnail', array( 'class' => 'stv-product-thumb' ) ) );
 			}
 			?>
 		</a>
-		<div class="p-4">
-			<h3 class="line-clamp-2 text-sm font-semibold leading-snug text-white">
+		<div class="stv-product-body">
+			<h3 class="stv-product-title">
 				<a href="<?php echo esc_url( get_permalink( $product->get_id() ) ); ?>">
 					<?php echo esc_html( $product->get_name() ); ?>
 				</a>
 			</h3>
-			<div class="mt-3 flex items-center justify-between gap-3">
-				<p class="text-sm font-bold text-stv-teal">
+			<div class="stv-product-actions">
+				<p class="stv-product-price">
 					<?php echo wp_kses_post( $product->get_price_html() ); ?>
 				</p>
-				<button class="stv-add-to-cart rounded-full bg-white px-3 py-2 text-xs font-bold text-black" type="button" data-product-id="<?php echo esc_attr( $product->get_id() ); ?>">
+				<button class="stv-add-to-cart" type="button" data-product-id="<?php echo esc_attr( $product->get_id() ); ?>">
 					<?php echo esc_html( $product->add_to_cart_text() ); ?>
 				</button>
 			</div>
-			<button class="stv-spec-trigger mt-3 text-xs font-semibold text-slate-300 hover:text-stv-teal" type="button" data-product-id="<?php echo esc_attr( $product->get_id() ); ?>" aria-expanded="false">
+			<button class="stv-spec-trigger" type="button" data-product-id="<?php echo esc_attr( $product->get_id() ); ?>" aria-expanded="false">
 				<?php echo esc_html__( 'Specs', 'street-techspot-ventures' ); ?>
 			</button>
-			<div class="stv-spec-drawer mt-3 hidden text-xs text-slate-300" data-specs-for="<?php echo esc_attr( $product->get_id() ); ?>"></div>
+			<div class="stv-spec-drawer hidden" data-specs-for="<?php echo esc_attr( $product->get_id() ); ?>"></div>
 		</div>
 	</article>
 	<?php
