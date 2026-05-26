@@ -1,0 +1,136 @@
+:root {
+	--stv-black: #050505;
+	--stv-carbon: #0b0f14;
+	--stv-graphite: #111827;
+	--stv-glass: rgba(255, 255, 255, 0.06);
+	--stv-border: rgba(255, 255, 255, 0.08);
+	--stv-teal: #00ffd1;
+	--stv-orange: #ff6b00;
+	--stv-blue: #4da3ff;
+	--stv-green: #00ff99;
+	--stv-white: #f9fafb;
+	--stv-muted: #9ca3af;
+	--stv-silver: #d1d5db;
+	color-scheme: dark;
+}
+
+html {
+	background: var(--stv-black);
+	scroll-behavior: smooth;
+}
+
+body {
+	background:
+		radial-gradient(circle at 20% 0%, rgba(0, 255, 209, 0.08), transparent 28rem),
+		radial-gradient(circle at 90% 20%, rgba(77, 163, 255, 0.08), transparent 28rem),
+		var(--stv-black);
+	font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+	letter-spacing: 0;
+	padding-bottom: 4.75rem;
+}
+
+img,
+video {
+	max-width: 100%;
+	height: auto;
+}
+
+.stv-glass-card,
+.stv-product-card {
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 1rem;
+	background: rgba(255, 255, 255, 0.05);
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+	backdrop-filter: blur(24px);
+	transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+	transform: translateZ(0);
+}
+
+.stv-glass-card:hover,
+.stv-product-card:hover {
+	border-color: rgba(0, 255, 209, 0.35);
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 22px rgba(0, 255, 209, 0.14);
+	transform: scale(1.01) translateZ(0);
+}
+
+.stv-product-card {
+	overflow: hidden;
+}
+
+.stv-product-card img {
+	aspect-ratio: 1 / 1;
+	width: 100%;
+	object-fit: cover;
+	background: #0b0f14;
+}
+
+.stv-grid-bg {
+	background-image:
+		linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+	background-size: 44px 44px;
+	mask-image: linear-gradient(to bottom, black, transparent 88%);
+	animation: stv-grid-drift 18s linear infinite;
+}
+
+.stv-scroll-row,
+.stv-snap-slider {
+	scrollbar-width: none;
+	-webkit-overflow-scrolling: touch;
+}
+
+.stv-scroll-row::-webkit-scrollbar,
+.stv-snap-slider::-webkit-scrollbar {
+	display: none;
+}
+
+.stv-skeleton {
+	position: relative;
+	overflow: hidden;
+	background: rgba(255, 255, 255, 0.06);
+}
+
+.stv-skeleton::after {
+	position: absolute;
+	inset: 0;
+	content: "";
+	transform: translateX(-100%);
+	background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+	animation: stv-shimmer 1.4s infinite;
+}
+
+.stv-floating-buy {
+	position: sticky;
+	bottom: 1rem;
+	z-index: 40;
+}
+
+@media (min-width: 768px) {
+	body {
+		padding-bottom: 0;
+	}
+}
+
+@keyframes stv-grid-drift {
+	from {
+		background-position: 0 0;
+	}
+
+	to {
+		background-position: 44px 44px;
+	}
+}
+
+@keyframes stv-shimmer {
+	to {
+		transform: translateX(100%);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	* {
+		animation-duration: 0.001ms !important;
+		scroll-behavior: auto !important;
+		transition-duration: 0.001ms !important;
+	}
+}

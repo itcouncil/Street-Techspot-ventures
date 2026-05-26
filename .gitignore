@@ -1,0 +1,9 @@
+wp-admin/
+wp-includes/
+wp-content/plugins/
+wp-content/uploads/
+xmlrpc.php
+wp-config.php
+*.log
+
+!wp-content/themes/street-techspot-ventures/
